@@ -1,121 +1,99 @@
 import { useState } from 'react'
-import heroImg from './assets/hero.png'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [tasks, setTasks] = useState([
+    { id: 1, title: 'Review project brief', category: 'Planning', done: true },
+    { id: 2, title: 'Prepare production build', category: 'Development', done: false },
+    { id: 3, title: 'Test deployed application', category: 'Testing', done: false },
+  ])
+
+  const completed = tasks.filter((task) => task.done).length
+
+  function toggleTask(id) {
+    setTasks(
+      tasks.map((task) =>
+        task.id === id ? { ...task, done: !task.done } : task
+      )
+    )
+  }
+
+  function addTask() {
+    setTasks([
+      ...tasks,
+      {
+        id: Date.now(),
+        title: `New task ${tasks.length + 1}`,
+        category: 'General',
+        done: false,
+      },
+    ])
+  }
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
+    <main className="app">
+      <header className="header">
         <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
+          <span className="logo">TaskFlow</span>
+          <p className="eyebrow">PROJECT DASHBOARD</p>
+          <h1>Keep your work moving.</h1>
+          <p className="intro">
+            Organize your priorities, track progress, and keep today's work
+            in one place.
           </p>
         </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
+
+        <button className="add-button" onClick={addTask}>
+          + Add task
         </button>
-      </section>
+      </header>
 
-      <div className="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
+      <section className="stats">
+        <div className="stat">
+          <span>Total tasks</span>
+          <strong>{tasks.length}</strong>
         </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
+        <div className="stat">
+          <span>Completed</span>
+          <strong>{completed}</strong>
+        </div>
+        <div className="stat">
+          <span>Remaining</span>
+          <strong>{tasks.length - completed}</strong>
         </div>
       </section>
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
+      <section className="task-section">
+        <div className="section-heading">
+          <div>
+            <p className="eyebrow">TODAY</p>
+            <h2>Your tasks</h2>
+          </div>
+          <span className="progress">
+            {completed} of {tasks.length} completed
+          </span>
+        </div>
+
+        <div className="task-list">
+          {tasks.map((task) => (
+            <button
+              className={`task ${task.done ? 'done' : ''}`}
+              key={task.id}
+              onClick={() => toggleTask(task.id)}
+            >
+              <span className="checkbox">{task.done ? '✓' : ''}</span>
+              <span className="task-copy">
+                <strong>{task.title}</strong>
+                <small>{task.category}</small>
+              </span>
+              <span className="status">
+                {task.done ? 'Completed' : 'Open'}
+              </span>
+            </button>
+          ))}
+        </div>
+      </section>
+    </main>
   )
 }
 
