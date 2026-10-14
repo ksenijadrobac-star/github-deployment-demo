@@ -36,7 +36,7 @@ function App() {
         <div>
           <span className="logo">TaskFlow</span>
           <p className="eyebrow">PROJECT DASHBOARD</p>
-          <h1>Keep your work moving.</h1>
+          <h1>Plan today. Make progress.</h1>
           <p className="intro">
             Organize your priorities, track progress, and keep today's work
             in one place.
